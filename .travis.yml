@@ -28,7 +28,7 @@ install:
   - ./gradlew checkPreconditions fullInstall
 
 script:
-  - ./gradlew instrumentJfopServer verify codeCoverageVerification
+  - ./gradlew instrumentJfopServer verify codeCoverageVerification calculateCodeCoverage
 
 after_script:
   - docker-compose stop || true
