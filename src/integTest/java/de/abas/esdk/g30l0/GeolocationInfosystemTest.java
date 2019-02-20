@@ -85,12 +85,36 @@ public class GeolocationInfosystemTest extends EsdkIntegTest {
 		assertInfosystemTableContains(VENDOR_CONTACT);
 	}
 
-	private void assertInfosystemTableContains(final TestingData vendor) {
-		assertThat(infosystem.table().getRowCount(), is(1));
-		assertThat(infosystem.table().getRow(1).getCustomer(), is(notNullValue()));
-		assertThat(infosystem.table().getRow(1).getCustomer().getSwd(), is(vendor.swd));
-		assertThat(infosystem.table().getRow(1).getZipcode(), is(vendor.zipCode));
-		assertThat(infosystem.table().getRow(1).getTown(), is(vendor.town));
+	@Test
+	public void canSelectBasedOnZipCode() {
+		infosystem.setZipcodesel(CUSTOMER.zipCode);
+		infosystem.invokeStart();
+
+		assertInfosystemTableContains(CUSTOMER);
+	}
+
+	@Test
+	public void canSelectBasedOnZipCodeAndSwd() {
+		infosystem.setCustomersel(VENDOR.swd);
+		infosystem.setZipcodesel(CUSTOMER.zipCode);
+		infosystem.invokeStart();
+
+		assertInfosystemTableContains(2, CUSTOMER, VENDOR);
+	}
+
+	private void assertInfosystemTableContains(int expectedRowCount, final TestingData... testData) {
+		assertThat(infosystem.table().getRowCount(), is(expectedRowCount));
+		for (int i = 0; i < testData.length; i++) {
+			int rowNo = i + 1;
+			assertThat(infosystem.table().getRow(rowNo).getCustomer(), is(notNullValue()));
+			assertThat(infosystem.table().getRow(rowNo).getCustomer().getSwd(), is(testData[i].swd));
+			assertThat(infosystem.table().getRow(rowNo).getZipcode(), is(testData[i].zipCode));
+			assertThat(infosystem.table().getRow(rowNo).getTown(), is(testData[i].town));
+		}
+	}
+
+	private void assertInfosystemTableContains(final TestingData testData) {
+		assertInfosystemTableContains(1, testData);
 	}
 
 	@After
