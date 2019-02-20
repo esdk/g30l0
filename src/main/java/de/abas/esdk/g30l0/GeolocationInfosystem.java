@@ -24,7 +24,7 @@ public class GeolocationInfosystem {
 
 	@ButtonEventHandler(field = "start", type = ButtonEventType.AFTER)
 	public void startAfter(DbContext ctx, GeoLocation infosystem) {
-		for (final TradingPartner tradingPartner : selectTradingPartners(ctx, infosystem.getCustomersel())) {
+		for (final TradingPartner tradingPartner : selectTradingPartners(ctx, infosystem.getCustomersel(), infosystem.getZipcodesel())) {
 			GeoLocation.Row row = infosystem.table().appendRow();
 			row.setCustomer(tradingPartner);
 			row.setZipcode(tradingPartner.getZipCode());
@@ -33,17 +33,17 @@ public class GeolocationInfosystem {
 		}
 	}
 
-	private List<TradingPartner> selectTradingPartners(final DbContext ctx, final String swd) {
+	private List<TradingPartner> selectTradingPartners(final DbContext ctx, final String swd, final String zipCode) {
 		List<TradingPartner> tradingPartners = new ArrayList<>();
-		tradingPartners.addAll(selectFromTradingPartner(Customer.class, ctx, swd));
-		tradingPartners.addAll(selectFromTradingPartner(CustomerContact.class, ctx, swd));
-		tradingPartners.addAll(selectFromTradingPartner(Vendor.class, ctx, swd));
-		tradingPartners.addAll(selectFromTradingPartner(VendorContact.class, ctx, swd));
+		tradingPartners.addAll(selectFromTradingPartner(Customer.class, ctx, swd, zipCode));
+		tradingPartners.addAll(selectFromTradingPartner(CustomerContact.class, ctx, swd, zipCode));
+		tradingPartners.addAll(selectFromTradingPartner(Vendor.class, ctx, swd, zipCode));
+		tradingPartners.addAll(selectFromTradingPartner(VendorContact.class, ctx, swd, zipCode));
 		return tradingPartners;
 	}
 
-	private <T extends TradingPartner> List<T> selectFromTradingPartner(Class<T> clazz, final DbContext ctx, final String swd) {
-		return ctx.createQuery(SelectionBuilder.create(clazz).add(Conditions.eq(T.META.swd, swd)).build()).execute();
+	private <T extends TradingPartner> List<T> selectFromTradingPartner(Class<T> clazz, final DbContext ctx, final String swd, final String zipCode) {
+		return ctx.createQuery(SelectionBuilder.create(clazz).add(Conditions.eq(T.META.swd, swd)).add(Conditions.eq(T.META.zipCode, zipCode)).setTermConjunction(SelectionBuilder.Conjunction.OR).build()).execute();
 	}
 
 }
