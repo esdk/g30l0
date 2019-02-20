@@ -1,10 +1,19 @@
 package de.abas.esdk.g30l0;
 
 import de.abas.erp.db.DbContext;
+import de.abas.erp.db.Deletable;
 import de.abas.erp.db.Query;
 import de.abas.erp.db.infosystem.custom.ow1.GeoLocation;
 import de.abas.erp.db.schema.customer.Customer;
+import de.abas.erp.db.schema.customer.CustomerContact;
+import de.abas.erp.db.schema.customer.CustomerContactEditor;
 import de.abas.erp.db.schema.customer.CustomerEditor;
+import de.abas.erp.db.schema.referencetypes.TradingPartner;
+import de.abas.erp.db.schema.referencetypes.TradingPartnerEditor;
+import de.abas.erp.db.schema.vendor.Vendor;
+import de.abas.erp.db.schema.vendor.VendorContact;
+import de.abas.erp.db.schema.vendor.VendorContactEditor;
+import de.abas.erp.db.schema.vendor.VendorEditor;
 import de.abas.erp.db.selection.Conditions;
 import de.abas.erp.db.selection.SelectionBuilder;
 import de.abas.erp.db.util.ContextHelper;
@@ -19,24 +28,38 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
 
-import static de.abas.esdk.g30l0.GeolocationInfosystemTest.TestData.CUSTOMER;
+import static de.abas.esdk.g30l0.GeolocationInfosystemTest.TestData.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 
-public class GeolocationInfosystemTest {
+public class GeolocationInfosystemTest<T extends TradingPartner & Deletable> {
 
 	private static DbContext ctx = createClientContext();
 
 	public GeoLocation infosystem = ctx.openInfosystem(GeoLocation.class);
 
 	@BeforeClass
-	public static void createTestData() {
-		CustomerEditor customerEditor = ctx.newObject(CustomerEditor.class);
-		customerEditor.setSwd(CUSTOMER.swd);
-		customerEditor.setZipCode(CUSTOMER.zipCode);
-		customerEditor.setTown(CUSTOMER.town);
-		customerEditor.commit();
+	public static void prepare() {
+		createTestData(CustomerEditor.class, CUSTOMER);
+		createTestData(VendorEditor.class, VENDOR);
+		createTestData(CustomerContactEditor.class, CUSTOMER_CONTACT);
+		createTestData(VendorContactEditor.class, VENDOR_CONTACT);
+	}
+
+	private static <T extends TradingPartnerEditor> void createTestData(Class<T> clazz, TestData testData) {
+		T editor = ctx.newObject(clazz);
+		if (editor instanceof CustomerContactEditor) {
+			((CustomerContactEditor) editor).setCompanyARAP((Customer) CUSTOMER.tradingPartner);
+		}
+		if (editor instanceof VendorContactEditor) {
+			((VendorContactEditor) editor).setCompanyARAP((Vendor) VENDOR.tradingPartner);
+		}
+		editor.setSwd(testData.swd);
+		editor.setZipCode(testData.zipCode);
+		editor.setTown(testData.town);
+		editor.commit();
+		testData.tradingPartner = editor;
 	}
 
 	@Test
@@ -44,11 +67,39 @@ public class GeolocationInfosystemTest {
 		infosystem.setCustomersel(CUSTOMER.swd);
 		infosystem.invokeStart();
 
+		assertInfosystemTableContains(CUSTOMER);
+	}
+
+	@Test
+	public void canDisplayVendorInfo() {
+		infosystem.setCustomersel(VENDOR.swd);
+		infosystem.invokeStart();
+
+		assertInfosystemTableContains(VENDOR);
+	}
+
+	@Test
+	public void canDisplayCustomerContactInfo() {
+		infosystem.setCustomersel(CUSTOMER_CONTACT.swd);
+		infosystem.invokeStart();
+
+		assertInfosystemTableContains(CUSTOMER_CONTACT);
+	}
+
+	@Test
+	public void canDisplayVendorContactInfo() {
+		infosystem.setCustomersel(VENDOR_CONTACT.swd);
+		infosystem.invokeStart();
+
+		assertInfosystemTableContains(VENDOR_CONTACT);
+	}
+
+	private void assertInfosystemTableContains(final TestData vendor) {
 		assertThat(infosystem.table().getRowCount(), is(1));
 		assertThat(infosystem.table().getRow(1).getCustomer(), is(notNullValue()));
-		assertThat(infosystem.table().getRow(1).getCustomer().getSwd(), is(CUSTOMER.swd));
-		assertThat(infosystem.table().getRow(1).getZipcode(), is(CUSTOMER.zipCode));
-		assertThat(infosystem.table().getRow(1).getTown(), is(CUSTOMER.town));
+		assertThat(infosystem.table().getRow(1).getCustomer().getSwd(), is(vendor.swd));
+		assertThat(infosystem.table().getRow(1).getZipcode(), is(vendor.zipCode));
+		assertThat(infosystem.table().getRow(1).getTown(), is(vendor.town));
 	}
 
 	@After
@@ -58,14 +109,17 @@ public class GeolocationInfosystemTest {
 
 	@AfterClass
 	public static void cleanup() {
-		deleteTestData();
+		deleteTestData(Customer.class, CUSTOMER);
+		deleteTestData(Vendor.class, VENDOR);
+		deleteTestData(CustomerContact.class, CUSTOMER_CONTACT);
+		deleteTestData(VendorContact.class, VENDOR_CONTACT);
 		ctx.close();
 	}
 
-	private static void deleteTestData() {
-		Query<Customer> customers = ctx.createQuery(SelectionBuilder.create(Customer.class).add(Conditions.eq(Customer.META.swd, CUSTOMER.swd)).build());
-		for (final Customer customer : customers) {
-			customer.delete();
+	private static <T extends TradingPartner & Deletable> void deleteTestData(Class<T> clazz, TestData testData) {
+		Query<T> tradingPartners = ctx.createQuery(SelectionBuilder.create(clazz).add(Conditions.eq(T.META.swd, testData.swd)).build());
+		for (final T tradingPartner : tradingPartners) {
+			tradingPartner.delete();
 		}
 	}
 
@@ -88,11 +142,15 @@ public class GeolocationInfosystemTest {
 	}
 
 	enum TestData {
-		CUSTOMER("G30L0CUS", "67165", "Waldsee");
+		CUSTOMER("G30L0CUS", "67165", "Waldsee"),
+		VENDOR("G30L0VEN", "76135", "Karlsruhe"),
+		CUSTOMER_CONTACT("G30L0CCO", "67346", "Speyer"),
+		VENDOR_CONTACT("G30L0VCO", "76227", "Karlsruhe");
 
 		String swd;
 		String zipCode;
 		String town;
+		TradingPartner tradingPartner;
 
 		TestData(String swd, String zipCode, String town) {
 			this.swd = swd;
