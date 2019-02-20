@@ -1,0 +1,17 @@
+:docinfo:
+= g30l0
+Documentation
+:nofooter:
+
+This document describes the g30l0 app.
+
+include::subpage.adoc[]
+
+include::additionalpage.adoc[]
+
+== About
+
+g30l0 +
+(C) Your Company
+
+https://your-website.com/
