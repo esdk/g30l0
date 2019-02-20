@@ -13,7 +13,7 @@ esdk {
 		vendorId = "ag"
 		appId = "g30l0"
 		shared = true
-		infosystems = []
+		infosystems = [ "IS.OW1.G30L0" ]
 		tables = []
 		screens = [:]
 		data = []
