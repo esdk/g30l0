@@ -1,0 +1,63 @@
+plugins {
+	id "de.abas.esdk" version "0.11.3"
+}
+
+repositories {
+	maven { url "http://$NEXUS_HOST:$NEXUS_PORT/nexus/content/repositories/$NEXUS_NAME-SNAPSHOT" }
+	maven { url "http://$NEXUS_HOST:$NEXUS_PORT/nexus/content/repositories/$NEXUS_NAME" }
+}
+
+esdk {
+	app {
+		name = "g30l0"
+		vendorId = "ag"
+		appId = "g30l0"
+		shared = true
+		infosystems = []
+		tables = []
+		screens = [:]
+		data = []
+		enums = []
+		namedTypes = []
+		languages = "DA"
+		essentialsVersions = [ "2017r4n00-2017r4n17" ]
+	}
+
+	abas {
+		homeDir = ABAS_HOMEDIR
+		clientDir = ABAS_CLIENTDIR
+		clientId = ABAS_CLIENTID
+		edpHost = EDP_HOST
+		edpPort = EDP_PORT.toInteger()
+		edpUser = EDP_USER
+		edpPassword = EDP_PASSWORD
+	}
+
+	nexus {
+		nexusHost = NEXUS_HOST
+		nexusPort = NEXUS_PORT.toInteger()
+		nexusRepoName = NEXUS_NAME
+		nexusPassword = NEXUS_PASSWORD
+		nexusVersion = NEXUS_VERSION
+	}
+
+	ssh {
+		host = SSH_HOST
+		port = SSH_PORT.toInteger()
+		user = SSH_USER
+		password = SSH_PASSWORD
+		key = SSH_KEY
+	}
+	installType = "SSH"
+}
+
+group = 'de.abas.esdk.g30l0'
+
+configurations { compile.extendsFrom provided }
+
+dependencies {
+	provided 'de.abas.homedir:log4j:1.0.0'
+
+	testCompile "junit:junit:4.12"
+	testCompile "org.hamcrest:hamcrest-all:1.3"
+}
