@@ -65,7 +65,7 @@ Z#0#isisref##0####(0)######0#0#0#0##0##
 Z#0#isselect##0####(1)######0#0#0#0##0##
 Z#0#isauswahl##0####(1)######0#0#0#0##0##
 Z#0#isstufe##0####(1)######0#0#0#0##0##
-Z#0#isbstart##0####(0)######0#0#0#0##0##
+Z#0#isbstart##0####(0)##java:de.abas.esdk.g30l0.GeolocationInfosystem@g30l0####0#0#0#0##0##
 Z#0#isstartzeit##0####(0)######0#0#0#0##0##
 Z#1#iscustomersel#GL20#0#Suchwort#(65)#(65)#(2)######1#1#0#0##0##
 Z#1#iszipcodesel#GL20#0#Postleitzahl#(65)#(65)#(2)######1#1#0#0##0##
@@ -88,9 +88,9 @@ Z#0#istbaumiconz##1####(0)######0#2#0#0##0##
 Z#0#istmenuemoeglich##1####(0)######0#0#0#0##0##
 Z#0#istmenueaktion##1####(0)######0#0#0#0##0##
 Z#0#istmenuean##1####(0)######0#0#0#0##0##
-Z#2#iscustomer#VPKS17#1#Gesch„ftspartner#(65)#(65)#(0)######1#1#0#0##0##
+Z#2#iscustomer#VPKS17#1#Geschï¿½ftspartner#(65)#(65)#(0)######1#1#0#0##0##
 Z#2#isstate#PS97:1#1#Land#(65)#(65)#(0)######1#1#0#0##0##
 Z#2#iszipcode#GL20#1#Postleitzahl#(65)#(65)#(0)######1#1#0#0##0##
 Z#2#istown#GL20#1#Stadt#(65)#(65)#(0)######1#1#0#0##0##
-Z#2#islongitude#MU4.8#1#L„ngengrad#(65)#(65)#(0)######1#1#0#0##0##
+Z#2#islongitude#MU4.8#1#Lï¿½ngengrad#(65)#(65)#(0)######1#1#0#0##0##
 Z#2#islatitude#MU4.8#1#Breitengrad#(65)#(65)#(0)######1#1#0#0##0##
