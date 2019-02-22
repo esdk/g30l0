@@ -81,7 +81,8 @@ dependencies {
 	implementation "de.abas.homedir:abas-db-internal:1.0.0"
 	implementation "de.abas.clientdir:abas-db:1.0.0-SNAPSHOT"
 	implementation "de.abas.clientdir:abas-db-infosys:1.0.0-SNAPSHOT"
-
+	implementation "fr.dudie:nominatim-api:3.3"
+	
 	runtime "de.abas.homedir:commons-collections:1.0.0"
 	runtime "de.abas.homedir:abas-jfop-base:1.0.0"
 	runtime "de.abas.homedir:jcl-over-slf4j:1.0.0"
