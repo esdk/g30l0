@@ -16,10 +16,9 @@ public class OpenStreetMapGeolocationResolver implements GeolocationResolver {
 
 	@Override
 	public Geolocation resolve(final TradingPartner tradingPartner) {
-		NominatimClient jsonNominatimClient = new JsonNominatimClient(new DefaultHttpClient(), "scrumteamesdk@abas.de");
 		Geolocation geolocation = new Geolocation();
 		try {
-			List<Address> addresses = jsonNominatimClient.search(tradingPartner.getStreet() + " " + tradingPartner.getZipCode() + " " + tradingPartner.getTown() + " " + tradingPartner.getStateOfTaxOffice().getSwd());
+			List<Address> addresses = resolveFromOpenStreetMaps(tradingPartner);
 			if (addresses.size() > 0) {
 				geolocation.setLatitude(addresses.get(0).getLatitude());
 				geolocation.setLongitude(addresses.get(0).getLongitude());
@@ -30,6 +29,11 @@ public class OpenStreetMapGeolocationResolver implements GeolocationResolver {
 			logger.error(String.format("Invalid address '%s': %s", getFormattedAddress(tradingPartner), e.getMessage()), e);
 		}
 		return geolocation;
+	}
+
+	private List<Address> resolveFromOpenStreetMaps(final TradingPartner tradingPartner) throws IOException {
+		NominatimClient jsonNominatimClient = new JsonNominatimClient(new DefaultHttpClient(), "scrumteamesdk@abas.de");
+		return jsonNominatimClient.search(tradingPartner.getStreet() + " " + tradingPartner.getZipCode() + " " + tradingPartner.getTown() + " " + tradingPartner.getStateOfTaxOffice().getSwd());
 	}
 
 	private String getFormattedAddress(TradingPartner tradingPartner) {
