@@ -1,0 +1,21 @@
+{
+  "name": "Kunde",
+  "number": 0,
+  "isMasterData": true,
+  "classname": "Customer",
+  "groups": [{
+    "name": "Kunde",
+    "number": 1,
+    "classname": "",
+    "headFields": [{
+      "name": "calcgeoloc",
+      "newName": "calcgeoloc",
+      "isSkip": true,
+      "type": "BU3",
+      "description": "Geodaten berechnen",
+      "screenVisibility": "ViewEditable",
+      "showPriority": "A",
+      "changePriority": "A"
+    }]
+  }]
+}
