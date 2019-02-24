@@ -1,0 +1,16 @@
+database master Kunde {
+	classname Customer
+	structure Kunde {
+		groupNumber 1
+		head {
+			field BU3 skip calcgeoloc {
+				label ""
+				heading ""
+				description "Geodaten berechnen"
+				screen VIEW_EDITABLE
+				showPriority A
+				changePriority A
+			}
+		}
+	}
+}
