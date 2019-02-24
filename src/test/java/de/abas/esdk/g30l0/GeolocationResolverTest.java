@@ -9,6 +9,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +44,15 @@ public class GeolocationResolverTest {
 		TradingPartner tradingPartner = getTradingPartner("invalid", "invalid", "does not exist", "UNITED STATES");
 		List<Address> addresses = new ArrayList<>();
 		doReturn(addresses).when(resolver, "resolveFromOpenStreetMaps", tradingPartner);
+		Geolocation geolocation = resolver.resolve(tradingPartner);
+		assertThat(geolocation.getLatitude(), is(nullValue()));
+		assertThat(geolocation.getLongitude(), is(nullValue()));
+	}
+
+	@Test
+	public void canHandleIOExceptionDuringGeolocationResolution() throws Exception {
+		TradingPartner tradingPartner = getTradingPartner("invalid", "invalid", "does not exist", "UNITED STATES");
+		doThrow(new IOException("Simulating IOException")).when(resolver, "resolveFromOpenStreetMaps", tradingPartner);
 		Geolocation geolocation = resolver.resolve(tradingPartner);
 		assertThat(geolocation.getLatitude(), is(nullValue()));
 		assertThat(geolocation.getLongitude(), is(nullValue()));
