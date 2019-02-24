@@ -30,6 +30,7 @@ import java.util.Properties;
 
 import static de.abas.esdk.g30l0.GeolocationInfosystemTest.TestData.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 
@@ -45,6 +46,7 @@ public class GeolocationInfosystemTest<T extends TradingPartner & Deletable> {
 		createTestData(VendorEditor.class, VENDOR);
 		createTestData(CustomerContactEditor.class, CUSTOMER_CONTACT);
 		createTestData(VendorContactEditor.class, VENDOR_CONTACT);
+		createTestData(CustomerEditor.class, INVALID);
 	}
 
 	private static <T extends TradingPartnerEditor> void createTestData(Class<T> clazz, TestData testData) {
@@ -111,6 +113,26 @@ public class GeolocationInfosystemTest<T extends TradingPartner & Deletable> {
 		assertInfosystemTableContains(2, CUSTOMER, VENDOR);
 	}
 
+	@Test
+	public void canDisplayGeolocation() {
+		infosystem.setCustomersel(CUSTOMER.swd);
+		infosystem.invokeStart();
+
+		assertThat(infosystem.table().getRow(1).getCustomer().getSwd(), is(CUSTOMER.swd));
+		assertThat(Double.valueOf(infosystem.table().getRow(1).getLatitude()), is(closeTo(49.3953008, 0.1)));
+		assertThat(Double.valueOf(infosystem.table().getRow(1).getLongitude()), is(closeTo(8.440276, 0.1)));
+	}
+
+	@Test
+	public void displaysEmptyStringForInvalidAddress() {
+		infosystem.setCustomersel(INVALID.swd);
+		infosystem.invokeStart();
+
+		assertThat(infosystem.table().getRow(1).getCustomer().getSwd(), is(INVALID.swd));
+		assertThat(infosystem.table().getRow(1).getLatitude(), is(""));
+		assertThat(infosystem.table().getRow(1).getLongitude(), is(""));
+	}
+
 	private void assertInfosystemTableContains(int expectedRowCount, final TestData... testData) {
 		assertThat(infosystem.table().getRowCount(), is(expectedRowCount));
 		for (int i = 0; i < testData.length; i++) {
@@ -137,6 +159,7 @@ public class GeolocationInfosystemTest<T extends TradingPartner & Deletable> {
 		deleteTestData(Vendor.class, VENDOR);
 		deleteTestData(CustomerContact.class, CUSTOMER_CONTACT);
 		deleteTestData(VendorContact.class, VENDOR_CONTACT);
+		deleteTestData(Customer.class, INVALID);
 		ctx.close();
 	}
 
@@ -169,7 +192,8 @@ public class GeolocationInfosystemTest<T extends TradingPartner & Deletable> {
 		CUSTOMER("G30L0CUS", "67165", "Waldsee"),
 		VENDOR("G30L0VEN", "76135", "Karlsruhe"),
 		CUSTOMER_CONTACT("G30L0CCO", "67346", "Speyer"),
-		VENDOR_CONTACT("G30L0VCO", "76227", "Karlsruhe");
+		VENDOR_CONTACT("G30L0VCO", "76227", "Karlsruhe"),
+		INVALID("G30L0INV", "invalid", "invalid");
 
 		String swd;
 		String zipCode;
