@@ -5,16 +5,16 @@ public class Geolocation {
 	private Double latitude;
 	private Double longitude;
 
-	public Double getLatitude() {
-		return latitude;
+	public String getLatitude() {
+		return (latitude != null ? latitude.toString() : "");
 	}
 
 	public void setLatitude(final Double latitude) {
 		this.latitude = latitude;
 	}
 
-	public Double getLongitude() {
-		return longitude;
+	public String getLongitude() {
+		return (longitude != null ? longitude.toString() : "");
 	}
 
 	public void setLongitude(final Double longitude) {
