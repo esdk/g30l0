@@ -21,6 +21,9 @@ public class GeolocationInfosystem {
 			row.setZipcode(tradingPartner.getZipCode());
 			row.setTown(tradingPartner.getTown());
 			row.setState(tradingPartner.getStateOfTaxOffice());
+			Geolocation geolocation = new OpenStreetMapGeolocationResolver().resolve(tradingPartner);
+			row.setLatitude(geolocation.getLatitude().toString());
+			row.setLongitude(geolocation.getLongitude().toString());
 		}
 	}
 
