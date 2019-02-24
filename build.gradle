@@ -15,7 +15,7 @@ esdk {
 		appId = "g30l0"
 		shared = true
 		infosystems = [ "IS.OW1.G30L0" ]
-		tables = []
+		tables = [ "Kunde" ]
 		screens = [:]
 		data = []
 		enums = []

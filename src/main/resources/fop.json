@@ -1,0 +1,24 @@
+[
+  {
+    "databaseName" : "(Customer)",
+    "groupName" : "(Customer)",
+    "editorMode" : "neu",
+    "event" : "buttonnach",
+    "key" : "*",
+    "field" : "yg30l0calcgeoloc",
+    "headOrTable" : "K",
+    "isContinue" : "[C]",
+    "handler" : "java:de.abas.esdk.g30l0.Customer@g30l0"
+  },
+  {
+    "databaseName" : "(Customer)",
+    "groupName" : "(Customer)",
+    "editorMode" : "ändern",
+    "event" : "buttonnach",
+    "key" : "*",
+    "field" : "yg30l0calcgeoloc",
+    "headOrTable" : "K",
+    "isContinue" : "[C]",
+    "handler" : "java:de.abas.esdk.g30l0.Customer@g30l0"
+  }
+]
