@@ -13,10 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.number.IsCloseTo.closeTo;
 import static org.junit.Assert.assertThat;
-import static org.powermock.api.mockito.PowerMockito.*;
+import static org.powermock.api.mockito.PowerMockito.doReturn;
+import static org.powermock.api.mockito.PowerMockito.mock;
+import static org.powermock.api.mockito.PowerMockito.when;
 
 @PrepareForTest(OpenStreetMapGeolocationResolver.class)
 @RunWith(PowerMockRunner.class)
@@ -34,8 +35,8 @@ public class GeolocationResolverTest {
 		addresses.add(address);
 		doReturn(addresses).when(resolver, "resolveFromOpenStreetMaps", tradingPartner);
 		Geolocation geolocation = resolver.resolve(tradingPartner);
-		assertThat(geolocation.getLatitude(), is(closeTo(49.0039809, 0.001)));
-		assertThat(geolocation.getLongitude(), is(closeTo(8.3849609, 0.001)));
+		assertThat(Double.valueOf(geolocation.getLatitude()), is(closeTo(49.0039809, 0.001)));
+		assertThat(Double.valueOf(geolocation.getLongitude()), is(closeTo(8.3849609, 0.001)));
 	}
 
 	@Test
@@ -44,8 +45,8 @@ public class GeolocationResolverTest {
 		List<Address> addresses = new ArrayList<>();
 		doReturn(addresses).when(resolver, "resolveFromOpenStreetMaps", tradingPartner);
 		Geolocation geolocation = resolver.resolve(tradingPartner);
-		assertThat(geolocation.getLatitude(), is(nullValue()));
-		assertThat(geolocation.getLongitude(), is(nullValue()));
+		assertThat(geolocation.getLatitude(), is(""));
+		assertThat(geolocation.getLongitude(), is(""));
 	}
 
 	private TradingPartner getTradingPartner(String street, String zipCode, String town, String country) {
