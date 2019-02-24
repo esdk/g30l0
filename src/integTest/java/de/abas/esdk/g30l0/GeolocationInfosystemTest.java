@@ -20,9 +20,11 @@ import org.junit.Test;
 
 import static de.abas.esdk.g30l0.GeolocationInfosystemTest.TestingData.CUSTOMER;
 import static de.abas.esdk.g30l0.GeolocationInfosystemTest.TestingData.CUSTOMER_CONTACT;
+import static de.abas.esdk.g30l0.GeolocationInfosystemTest.TestingData.INVALID;
 import static de.abas.esdk.g30l0.GeolocationInfosystemTest.TestingData.VENDOR;
 import static de.abas.esdk.g30l0.GeolocationInfosystemTest.TestingData.VENDOR_CONTACT;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 
@@ -36,6 +38,7 @@ public class GeolocationInfosystemTest extends EsdkIntegTest {
 		createTestData(VendorEditor.class, VENDOR);
 		createTestData(CustomerContactEditor.class, CUSTOMER_CONTACT);
 		createTestData(VendorContactEditor.class, VENDOR_CONTACT);
+		createTestData(CustomerEditor.class, INVALID);
 	}
 
 	private static <T extends TradingPartnerEditor> void createTestData(Class<T> clazz, TestingData testData) {
@@ -102,6 +105,26 @@ public class GeolocationInfosystemTest extends EsdkIntegTest {
 		assertInfosystemTableContains(2, CUSTOMER, VENDOR);
 	}
 
+	@Test
+	public void canDisplayGeolocation() {
+		infosystem.setCustomersel(CUSTOMER.swd);
+		infosystem.invokeStart();
+
+		assertThat(infosystem.table().getRow(1).getCustomer().getSwd(), is(CUSTOMER.swd));
+		assertThat(Double.valueOf(infosystem.table().getRow(1).getLatitude()), is(closeTo(49.3953008, 0.1)));
+		assertThat(Double.valueOf(infosystem.table().getRow(1).getLongitude()), is(closeTo(8.440276, 0.1)));
+	}
+
+	@Test
+	public void displaysEmptyStringForInvalidAddress() {
+		infosystem.setCustomersel(INVALID.swd);
+		infosystem.invokeStart();
+
+		assertThat(infosystem.table().getRow(1).getCustomer().getSwd(), is(INVALID.swd));
+		assertThat(infosystem.table().getRow(1).getLatitude(), is(""));
+		assertThat(infosystem.table().getRow(1).getLongitude(), is(""));
+	}
+
 	private void assertInfosystemTableContains(int expectedRowCount, final TestingData... testData) {
 		assertThat(infosystem.table().getRowCount(), is(expectedRowCount));
 		for (int i = 0; i < testData.length; i++) {
@@ -128,13 +151,15 @@ public class GeolocationInfosystemTest extends EsdkIntegTest {
 		TestData.deleteData(ctx, Vendor.class, Vendor.META.swd, VENDOR.swd);
 		TestData.deleteData(ctx, CustomerContact.class, CustomerContact.META.swd, CUSTOMER_CONTACT.swd);
 		TestData.deleteData(ctx, VendorContact.class, VendorContact.META.swd, VENDOR_CONTACT.swd);
+		TestData.deleteData(ctx, Customer.class, Customer.META.swd, INVALID.swd);
 	}
 
 	enum TestingData {
 		CUSTOMER("G30L0CUS", "67165", "Waldsee"),
 		VENDOR("G30L0VEN", "76135", "Karlsruhe"),
 		CUSTOMER_CONTACT("G30L0CCO", "67346", "Speyer"),
-		VENDOR_CONTACT("G30L0VCO", "76227", "Karlsruhe");
+		VENDOR_CONTACT("G30L0VCO", "76227", "Karlsruhe"),
+		INVALID("G30L0INV", "invalid", "invalid");
 
 		String swd;
 		String zipCode;
