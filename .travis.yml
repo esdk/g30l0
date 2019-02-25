@@ -22,6 +22,11 @@ before_install:
   - docker login sdp.registry.abas.sh -u $REGISTRY_USER -p $REGISTRY_PASSWORD
   - travis_wait docker-compose up -d
   - sleep 45
+  - mkdir -p cloud-connect
+  - wget -qO- 'https://esdk-hybrid.eu.abas.cloud/cloud-connect.tgz' | tar xfz - --directory cloud-connect
+  - sed -e "s/hostname/$(hostname)/g" ci/configuration.json > cloud-connect/configuration.json
+  - cloud-connect/setup.sh -n --tenant-configuration $TENANT_SECRET
+  - cloud-connect/run.sh
   - ./initGradleProperties.sh
 
 install:
@@ -33,3 +38,4 @@ script:
 after_script:
   - docker-compose stop || true
   - docker-compose rm -f || true
+  - cloud-connect/stop.sh || true
