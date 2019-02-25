@@ -1,0 +1,10 @@
+== Introduction
+
+The Geolocation App is an ESDk App by the abas Essentials SDK team to demonstrate the usage of ESDK for ESDK App development.
+
+It consists of an Infosystem `GEOLOCATION`, a additonal variable table `GeolocationConfig`, custom database screens for
+the Customer and GeolocationConfig databases, an EventHandler registered for a button in the Customer database and
+a print layout with Jasper Reports file.
+
+The Geolocation App can calculate the exact geolocation - latitude and logitude - for a given customer address.
+It also provides a button in the Customer database to calculate and save the geolocation for the displayed customer.

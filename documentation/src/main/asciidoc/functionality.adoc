@@ -1,0 +1,23 @@
+== Functionality
+
+The following chapters describe the different components of the Geolocation App in a bit more detail.
+
+=== Infosystem GEOLOCATION
+
+The Infosystem `GEOLOCATION` displays all Business Partners Address information and calculates and displays the geolocation.
+
+image::g30l0-IS.png[]
+
+<1> Filter by zip code
+<2> Filter by search word
+
+=== Customer extension
+
+In the Customer screen a button `Calculate Geolocation` is added in the `g30l0` tab.
+The button can be moved to any other tab, by manual configuration.
+
+It calculates the customer's geolocation and stores it in the latitude and logitude fields.
+
+=== Database GeolocationConfig
+
+To extend the Geolocation App with other web services, the GeolocationConfig database can be used.
