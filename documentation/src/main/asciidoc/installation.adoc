@@ -1,0 +1,18 @@
+== Installation
+
+The Geolocation App is a marketplace app and subject of licensing. It is licensed for all current Docker images available
+in the abas Partner Docker Registry.
+
+If you want to try it out in any other client you can contact us and we will give you a free license for this app,
+since it is for demonstration purposes.
+
+In order to install it you need to have a hybrid tenant configured. Follow the instructions for link::https://documentation.abas.cloud/en/cloud-connect/[abas Cloud Connect]
+to setup a hybrid tenant.
+
+Once you have your hybrid tenant up and running you can install the app via the link::https://documentation.abas.cloud/en/esdk/#esdk-app-installer[ESDK App Installer].
+In the abas client you want to install the Geolocation App in run the following command:
+
+[source,shell]
+----
+esdk-app-installer -a https://s3.amazonaws.com/abas-app-releases/g30l0/0.0.1/geolocation-0.0.1-app.jar
+----
