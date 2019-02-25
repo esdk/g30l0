@@ -8,6 +8,7 @@ import de.abas.erp.db.DbContext;
 import de.abas.erp.db.infosystem.custom.ow1.GeoLocation;
 import de.abas.erp.db.schema.referencetypes.TradingPartner;
 import de.abas.erp.jfop.rt.api.annotation.RunFopWith;
+import de.abas.esdk.client.api.license.LicenseChecker;
 
 @EventHandler(head = GeoLocation.class, row = GeoLocation.Row.class)
 @RunFopWith(EventHandlerRunner.class)
@@ -15,15 +16,17 @@ public class GeolocationInfosystem {
 
 	@ButtonEventHandler(field = "start", type = ButtonEventType.AFTER)
 	public void startAfter(DbContext ctx, GeoLocation infosystem) {
-		for (final TradingPartner tradingPartner : new TradingPartnerSelector().selectTradingPartners(ctx, infosystem.getCustomersel(), infosystem.getZipcodesel())) {
-			GeoLocation.Row row = infosystem.table().appendRow();
-			row.setCustomer(tradingPartner);
-			row.setZipcode(tradingPartner.getZipCode());
-			row.setTown(tradingPartner.getTown());
-			row.setState(tradingPartner.getStateOfTaxOffice());
-			Geolocation geolocation = new OpenStreetMapGeolocationResolver().resolve(tradingPartner);
-			row.setLatitude(geolocation.getLatitude().toString());
-			row.setLongitude(geolocation.getLongitude().toString());
+		if (LicenseChecker.instance().validate(true)) {
+			for (final TradingPartner tradingPartner : new TradingPartnerSelector().selectTradingPartners(ctx, infosystem.getCustomersel(), infosystem.getZipcodesel())) {
+				GeoLocation.Row row = infosystem.table().appendRow();
+				row.setCustomer(tradingPartner);
+				row.setZipcode(tradingPartner.getZipCode());
+				row.setTown(tradingPartner.getTown());
+				row.setState(tradingPartner.getStateOfTaxOffice());
+				Geolocation geolocation = new OpenStreetMapGeolocationResolver().resolve(tradingPartner);
+				row.setLatitude(geolocation.getLatitude().toString());
+				row.setLongitude(geolocation.getLongitude().toString());
+			}
 		}
 	}
 

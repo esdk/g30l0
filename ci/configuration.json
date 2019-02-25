@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "installation_mode": 2,
+  "tenant": "esdk-hybrid",
+  "domain": "eu.abas.cloud",
+  "aws_region": "eu-central-1",
+  "stage": "prod",
+  "options": {
+    "useSSH": true,
+    "docker_host": "hostname",
+    "cloud_connect_host": "hostname",
+    "awslogsEnabled": "true"
+  },
+  "apps": {
+    "screenFetcher": {
+      "install": false,
+      "generate_all_screens": false
+    }
+  },
+  "add_ons": {
+    "fts": {
+      "install": false
+    }
+  },
+  "services": {
+    "environment": {},
+    "license_server": {
+      "enabled": true
+    },
+    "jwt": {
+      "port": 19951,
+      "userSyncMode": "full",
+      "workspaces": "26a",
+      "permissions": "26"
+    },
+    "workflow": {
+      "host": "localhost",
+      "port": 8088,
+      "enabled": false
+    },
+    "bapps": {
+      "host": "localhost",
+      "port": 9990,
+      "enabled": false
+    },
+    "search": {
+      "host": "localhost",
+      "port": 9200,
+      "enabled": false
+    },
+    "erp": {
+      "host": "hostname",
+      "port": 6560,
+      "user": null,
+      "ssh": {
+        "user": "s3",
+        "port": 2205
+      },
+      "password": "sy"
+    }
+  }
+}
