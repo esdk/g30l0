@@ -1,17 +1,19 @@
 :docinfo:
-= g30l0
+= Geolocation App
 Documentation
 :nofooter:
 
-This document describes the g30l0 app.
+This document describes the Geolocation App.
 
-include::subpage.adoc[]
+include::introduction.adoc[]
 
-include::additionalpage.adoc[]
+include::installation.adoc[]
+
+include::functionality.adoc[]
 
 == About
 
-g30l0 +
-(C) Your Company
+Geolocation App +
+(C) abas Software AG
 
-https://your-website.com/
+https://abas-essentials-sdk.com/
