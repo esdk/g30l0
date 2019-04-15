@@ -125,7 +125,7 @@ dependencies {
 	runtime "de.abas.homedir:jcl-over-slf4j:1.0.0"
 	runtime "de.abas.homedir:slf4j-api:1.0.0"
 
-	licensing "de.abas.esdk:client-api:0.0.7:all"
+	licensing "de.abas.esdk:client-api:0.0.11:all"
 
 	testImplementation "junit:junit:4.12"
 	testImplementation "org.hamcrest:hamcrest-all:1.3"
