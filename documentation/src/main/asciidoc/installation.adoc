@@ -14,5 +14,5 @@ In the abas client you want to install the Geolocation App in run the following 
 
 [source,shell]
 ----
-esdk-app-installer -a https://s3.amazonaws.com/abas-app-releases/g30l0/0.0.1/geolocation-0.0.1-app.jar
+esdk-app-installer -a https://s3.amazonaws.com/abas-app-releases/g30l0/0.0.1/geolocation-0.0.1-app.jar --yes-i-have-a-backup
 ----
