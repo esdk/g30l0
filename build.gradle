@@ -1,5 +1,6 @@
 plugins {
 	id "de.abas.esdk" version "1.0.0"
+	id 'com.github.kt3k.coveralls' version '2.8.2'
 }
 
 repositories {
@@ -53,6 +54,17 @@ esdk {
 	installType = "SSH"
 }
 
+coveralls {
+	jacocoReportPath 'build/reports/jacoco/calculateCodeCoverage/calculateCodeCoverage.xml'
+}
+
+calculateCodeCoverage {
+	reports {
+		xml.enabled true
+	}
+	finalizedBy tasks.coveralls
+}
+
 group = 'de.abas.esdk.g30l0'
 
 configurations { compile.extendsFrom provided }
@@ -79,4 +91,7 @@ dependencies {
 
 	testImplementation "junit:junit:4.12"
 	testImplementation "org.hamcrest:hamcrest-all:1.3"
+	testImplementation "de.abas.esdk.test.util:esdk-test-utils:0.0.2"
+
+	integTestRuntime "de.abas.homedir:abas-db-util:1.0.0"
 }
