@@ -1,4 +1,7 @@
-# g30l0
+# G30L0
+[![Build Status](https://travis-ci.org/esdk/g30l0.svg?branch=master)](https://travis-ci.org/esdk/g30l0)
+[![Coverage Status](https://coveralls.io/repos/github/esdk/g30l0/badge.svg?branch=master)](https://coveralls.io/github/esdk/g30l0?branch=master)
+
 This is the source code of g30l0, an abas Essentials App build on the abas Essentials SDK.
 
 ## General setup
@@ -33,18 +36,14 @@ Now you can install the project as follows:
 ./gradlew fullInstall
 ```
 ## Development
-If you want to make changes to the project before installing you still need to run the docker-compose.yml file 
-or at least have a Nexus Server set up to work with.
+You can make changes such as manipulating the app's logic or adding/removing components.
 
-Then run
+First install the app as described in [Installation](##Installation) using:
 ```shell
-./gradlew publishHomeDirJars
-```
+./gradlew fullInstall
+``` 
 
-You also need to run
+To deploy your changes run:
 ```shell
-./gradlew publishClientDirJars
+./gradlew syncCode
 ```
-to upload the $MANDANTDIR/java/lib dependencies to the Nexus Server and set your IDE up to work with the uploaded dependencies.
-
-After that the code should compile both with gradle and in your IDE and you are set up to work on the code or resource files as you want.
