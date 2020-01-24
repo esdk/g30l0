@@ -13,6 +13,10 @@ env:
 jdk:
   - openjdk8
 
+# TODO: Remove as this is for ESDK team internal build notifications only.
+notifications:
+  slack: "abas.cloud:$SLACK_TOKEN#esdk-bot"
+
 # TODO: In the Travis UI  for your repository register your credentials for https://registry.abas.sh in Settings > Environment Variables as REGISTRY_USER and REGISTRY_PASSWORD
 before_install:
   - sudo rm /usr/local/bin/docker-compose
