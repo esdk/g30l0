@@ -1,4 +1,4 @@
-FROM sdp.registry.abas.sh/abas/test:2018r4n14p19
+FROM sdp.registry.abas.sh/abas/test:2018r4n14p55
 
 USER root
 # Disable DNS lookup in sshd.

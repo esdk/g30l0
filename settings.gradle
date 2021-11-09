@@ -1,0 +1,9 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenLocal()
+        maven {
+            url = uri("https://artifactory.abas.sh/artifactory/abas.maven-public/")
+        }
+    }
+}
