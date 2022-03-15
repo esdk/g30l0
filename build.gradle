@@ -30,7 +30,7 @@ esdk {
 		enums = []
 		namedTypes = []
 		languages = "DA"
-		essentialsVersions = ["2018r4-2018r4"]
+		essentialsVersions = ["2018r4-2019r4"]
 	}
 
 	abas {
