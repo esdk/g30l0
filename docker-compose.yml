@@ -5,9 +5,7 @@ services:
     # Accessing container via ssh: docker exec -u erp -it erp bash
     #
     erp:
-      build:
-        context: .
-        dockerfile: Dockerfile-erp-overrides
+      image: sdp.registry.abas.sh/abas/test:${ERP_VERSION:-2018r4n14p55}
       init: true
       container_name: "erp"
       
