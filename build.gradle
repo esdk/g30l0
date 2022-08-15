@@ -1,20 +1,36 @@
 plugins {
-	id "de.abas.esdk" version "1.2.0"
+	id "de.abas.esdk" version "1.2.5"
 	id 'com.github.kt3k.coveralls' version '2.8.2'
 	id 'idea'
 }
 
 repositories {
-	maven { url "https://registry.abas.sh/artifactory/abas.maven-public/" }
-	maven {
-		url "http://$NEXUS_HOST:$NEXUS_PORT/nexus/content/repositories/$NEXUS_NAME-SNAPSHOT"
-		allowInsecureProtocol = true
-	}
-	maven {
-		url "http://$NEXUS_HOST:$NEXUS_PORT/nexus/content/repositories/$NEXUS_NAME"
-		allowInsecureProtocol = true
-	}
+    exclusiveContent {
+        forRepository {
+            flatDir {
+                // mapped directory containing homedir libs
+                dirs 'erpsync/homedir/lib'
+            }
+        }
+        filter {
+            // restrict this repository to lookup homedir libs only
+            includeGroup('de.abas.homedir')
+        }
+    }
+    exclusiveContent {
+        forRepository {
+            flatDir {
+                // mapped directory containing clientdir libs
+                dirs 'erpsync/clientdir/lib'
+            }
+        }
+        filter {
+            // restrict this repository to lookup clientdir libs only
+            includeGroup('de.abas.clientdir')
+        }
+    }
 }
+
 
 esdk {
 	app {
@@ -43,13 +59,9 @@ esdk {
 		edpPassword = EDP_PASSWORD
 	}
 
-	nexus {
-		nexusHost = NEXUS_HOST
-		nexusPort = NEXUS_PORT.toInteger()
-		nexusRepoName = NEXUS_NAME
-		nexusPassword = NEXUS_PASSWORD
-		nexusVersion = NEXUS_VERSION
-	}
+    nexus {
+        nexusVersion = NEXUS_VERSION
+    }
 
 	ssh {
 		host = SSH_HOST
