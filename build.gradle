@@ -32,48 +32,6 @@ repositories {
         maven { url "https://registry.abas.sh/artifactory/abas.maven-public/" }
 }
 
-
-esdk {
-	app {
-		name = "g30l0"
-		vendorId = "ag"
-		appId = "g30l0"
-		shared = false
-		workdirs = [ "ow1" ]
-		infosystems = [ "IS.OW1.G30L0" ]
-		tables = [ "Kunde" ]
-		screens = [:]
-		data = []
-		enums = []
-		namedTypes = []
-		languages = "DA"
-		essentialsVersions = ["2018r4-2019r4"]
-	}
-
-	abas {
-		homeDir = ABAS_HOMEDIR
-		clientDir = ABAS_CLIENTDIR
-		clientId = ABAS_CLIENTID
-		edpHost = EDP_HOST
-		edpPort = EDP_PORT.toInteger()
-		edpUser = EDP_USER
-		edpPassword = EDP_PASSWORD
-	}
-
-    nexus {
-        nexusVersion = NEXUS_VERSION
-    }
-
-	ssh {
-		host = SSH_HOST
-		port = SSH_PORT.toInteger()
-		user = SSH_USER
-		password = SSH_PASSWORD
-		key = SSH_KEY
-	}
-	installType = "SSH"
-}
-
 task instrument(dependsOn: [classes, project.configurations.jacocoAnt]) {
 
 	inputs.files classes.outputs.files
