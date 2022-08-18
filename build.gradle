@@ -29,9 +29,9 @@ repositories {
             includeGroup('de.abas.clientdir')
         }
     }
-        maven { 
-            url "https://registry.abas.sh/artifactory/abas.maven-public/" 
-        }
+    maven { 
+        url "https://registry.abas.sh/artifactory/abas.maven-public/" 
+    }
 }
 
 task instrument(dependsOn: [classes, project.configurations.jacocoAnt]) {
