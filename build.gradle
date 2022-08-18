@@ -29,49 +29,9 @@ repositories {
             includeGroup('de.abas.clientdir')
         }
     }
-        maven { url "https://registry.abas.sh/artifactory/abas.maven-public/" }
-}
-
-
-esdk {
-	app {
-		name = "g30l0"
-		vendorId = "ag"
-		appId = "g30l0"
-		shared = false
-		workdirs = [ "ow1" ]
-		infosystems = [ "IS.OW1.G30L0" ]
-		tables = [ "Kunde" ]
-		screens = [:]
-		data = []
-		enums = []
-		namedTypes = []
-		languages = "DA"
-		essentialsVersions = ["2018r4-2019r4"]
-	}
-
-	abas {
-		homeDir = ABAS_HOMEDIR
-		clientDir = ABAS_CLIENTDIR
-		clientId = ABAS_CLIENTID
-		edpHost = EDP_HOST
-		edpPort = EDP_PORT.toInteger()
-		edpUser = EDP_USER
-		edpPassword = EDP_PASSWORD
-	}
-
-    nexus {
-        nexusVersion = NEXUS_VERSION
+    maven { 
+        url "https://registry.abas.sh/artifactory/abas.maven-public/" 
     }
-
-	ssh {
-		host = SSH_HOST
-		port = SSH_PORT.toInteger()
-		user = SSH_USER
-		password = SSH_PASSWORD
-		key = SSH_KEY
-	}
-	installType = "SSH"
 }
 
 task instrument(dependsOn: [classes, project.configurations.jacocoAnt]) {
@@ -126,26 +86,79 @@ group = 'de.abas.esdk.g30l0'
 
 configurations { compile.extendsFrom provided }
 
+// Create flag to simplify ERP version specific configuration settings below.
+// Useful to select different AJO libraries or 'esdk.app.essentialsVersions'.
+// 'targetErpVersion' can be provided in 'gradle.properties' or as command line parameter.
+// Default is a version below '2101' (i.e. before ERP 21 SP).
+Boolean useErp21SPLibs = targetErpVersion.majorVersion >= 2101
+
+group = 'myap'
+
+// Always generate code for Java 8
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
+}
+
 dependencies {
-	provided 'de.abas.homedir:log4j:1.0.0'
-	provided "de.abas.homedir:abas-db-base:1.0.0"
-	provided "de.abas.homedir:jedp:1.0.0"
-	provided "de.abas.homedir:abas-jfop-runtime-api:1.0.0"
-	provided "de.abas.homedir:abas-erp-common:1.0.0"
-	provided "de.abas.homedir:abas-enums:1.0.0"
+	constraints {
+        implementation("org.apache.logging.log4j:log4j-core") {
+            version {
+                strictly("[2.17, 3[")
+                prefer("2.17.1")
+            }
+            because("CVE-2021-44228, CVE-2021-45046, CVE-2021-45105: " +
+                    "Log4j vulnerable to remote code execution and other critical security vulnerabilities")
+        }
+    }
+    
+    if (useErp21SPLibs) {
+        // Some libraries have been renamed in ERP 21 SP - here we use the new names
 
-	implementation "de.abas.homedir:abas-axi2:1.0.0"
-	implementation "de.abas.homedir:abas-axi:1.0.0"
-	implementation "de.abas.homedir:abas-db-internal:1.0.0"
-	implementation "de.abas.clientdir:abas-db:1.0.0-SNAPSHOT"
-	implementation "de.abas.clientdir:abas-db-index:1.0.0-SNAPSHOT"
-	implementation "de.abas.clientdir:abas-db-infosys:1.0.0-SNAPSHOT"
-	implementation "fr.dudie:nominatim-api:3.4"
+        // AJO interfaces
+        provided 'erpsync.homedir.lib:abas-ajo-db:1.0.0'
+        provided 'erpsync.homedir.lib:abas-ajo-common-type-enums-base:1.0.0'
+        provided 'erpsync.homedir.lib:abas-ajo-common-type-enums-standard:1.0.0'
+        provided 'erpsync.homedir.lib:abas-ajo-common:1.0.0'
+        provided 'erpsync.homedir.lib:abas-jfop-rt-api:1.0.0'
+        
 
+        implementation 'erpsync.homedir.lib:abas-ajo-axi2:1.0.0'
+        // AJO-AXI classes
+        implementation 'erpsync.homedir.lib:abas-ajo-axi:1.0.0'
+        // AJO interface implementation
+        implementation 'erpsync.homedir.lib:abas-ajo-db-internal:1.0.0'
+        // Helper classes for AJO framework an generator
+        //implementation 'erpsync.homedir.lib:abas-ajo-db-common:1.0.0'
+        // Helper classes to handle selections, fields, meta data, buffers, and contexts
+        implementation 'erpsync.homedir.lib:abas-ajo-db-util:1.0.0'
+    } else {
+	   provided "de.abas.homedir:abas-db-base:1.0.0"
+	
+    	provided "de.abas.homedir:abas-jfop-runtime-api:1.0.0"
+    	provided "de.abas.homedir:abas-erp-common:1.0.0"
+    	provided "de.abas.homedir:abas-enums:1.0.0"
+
+    	implementation "de.abas.homedir:abas-axi2:1.0.0"
+    	implementation "de.abas.homedir:abas-axi:1.0.0"
+    	implementation "de.abas.homedir:abas-db-internal:1.0.0"
+    	implementation "de.abas.homedir:abas-db-util:1.0.0"
+    }
+
+    provided "de.abas.homedir:jedp:1.0.0"
+    provided("de.abas.homedir:log4j:1.0.0")
+    
+    implementation "de.abas.clientdir:abas-db:1.0.0-SNAPSHOT"
+    implementation "de.abas.clientdir:abas-db-index:1.0.0-SNAPSHOT"
+    implementation "de.abas.clientdir:abas-db-infosys:1.0.0-SNAPSHOT"
+    implementation "fr.dudie:nominatim-api:3.4"
+	
+    runtimeOnly "de.abas.homedir:abas-jfop-base:1.0.0"
 	runtimeOnly "de.abas.homedir:commons-collections:1.0.0"
-	runtimeOnly "de.abas.homedir:abas-jfop-base:1.0.0"
 	runtimeOnly "de.abas.homedir:jcl-over-slf4j:1.0.0"
 	runtimeOnly "de.abas.homedir:slf4j-api:1.0.0"
+	
 
 	testImplementation "junit:junit:4.12"
 	testImplementation "org.hamcrest:hamcrest-all:1.3"
@@ -154,7 +167,7 @@ dependencies {
 	testImplementation "org.powermock:powermock-module-junit4:1.6.2"
 	testImplementation "org.powermock:powermock-api-mockito:1.6.2"
 
-	integTestRuntimeOnly "de.abas.homedir:abas-db-util:1.0.0"
+	
 }
 
 idea {
