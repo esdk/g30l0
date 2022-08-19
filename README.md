@@ -21,24 +21,23 @@ Use your favorite IDE to import the project.
 
 ## Installation
 To install the project make sure you are running the docker-compose.yml file 
-or else change the gradle.properties file accordingly to use another erp client 
-(you will still need a nexus server, but it can of course also be installed in your erp installation 
-or elsewhere as long as it is configured in the gradle.properties file).
+or else change the application.conf file accordingly to use another erp client.
 
 To use the project's docker-compose.yml file, in the project's root directory run:
 ```shell
 docker login --username <extranet user> --password <extranet password> sdp.registry.abas.sh
-docker-compose up
+docker-compose up -d
 ```
 
 Now you can install the project as follows:
 ```shell
 ./gradlew fullInstall
 ```
+
 ## Development
 You can make changes such as manipulating the app's logic or adding/removing components.
 
-First install the app as described in [Installation](##Installation) using:
+First install the app as described in [Installation](#Installation) using:
 ```shell
 ./gradlew fullInstall
 ``` 
