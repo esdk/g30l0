@@ -88,9 +88,9 @@ Z#0#istbaumiconz##1####(0)######0#2#0#0##0##
 Z#0#istmenuemoeglich##1####(0)######0#0#0#0##0##
 Z#0#istmenueaktion##1####(0)######0#0#0#0##0##
 Z#0#istmenuean##1####(0)######0#0#0#0##0##
-Z#2#iscustomer#VPKS17#1#Gesch�ftspartner#(65)#(65)#(0)######1#1#0#0##0##
+Z#2#iscustomer#VPKS17#1#Geschäftspartner#(65)#(65)#(0)######1#1#0#0##0##
 Z#2#isstate#PS97:1#1#Land#(65)#(65)#(0)######1#1#0#0##0##
 Z#2#iszipcode#GL20#1#Postleitzahl#(65)#(65)#(0)######1#1#0#0##0##
 Z#2#istown#GL20#1#Stadt#(65)#(65)#(0)######1#1#0#0##0##
-Z#2#islongitude#GL30#1#L�ngengrad#(65)#(65)#(0)######1#1#0#0##0##
+Z#2#islongitude#GL30#1#Längengrad#(65)#(65)#(0)######1#1#0#0##0##
 Z#2#islatitude#GL30#1#Breitengrad#(65)#(65)#(0)######1#1#0#0##0##
